@@ -1,0 +1,33 @@
+syntax = "proto3";
+package cacher;
+service Cache {
+    rpc Set (SetRequest) returns (SetReply) {}
+    rpc Get (GetRequest) returns (GetReply) {}
+    rpc Del (DelRequest) returns (DelReply) {}
+    rpc All(AllRequest) returns (stream AllReply) {}
+}
+message Entry {
+    string key = 1;
+    bytes val = 2;
+}
+message SetRequest {
+    Entry entry = 1;
+}
+message SetReply {
+}
+message GetRequest {
+    string key = 1;
+}
+message GetReply {
+    bytes val = 1;
+}
+message DelRequest {
+    string key = 1;
+}
+message DelReply {
+}
+message AllRequest {
+}
+message AllReply {
+    Entry entry = 1;
+}
