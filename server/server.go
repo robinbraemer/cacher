@@ -9,42 +9,46 @@ import (
 	"google.golang.org/grpc/status"
 	"log"
 	"net"
+	"sync"
 )
 
 type CacheServer struct {
-	m map[string][]byte
+	m sync.Map
 }
 
 func (s *CacheServer) All(ctx *proto.AllRequest, stream proto.Cache_AllServer) error {
-	for k, v := range s.m {
-		if err := stream.Send(&proto.AllReply{Entry: &proto.Entry{Key: k, Val: v}}); err != nil {
-			return err
+	var e error
+	s.m.Range(func(k, v interface{}) bool {
+		if err := stream.Send(&proto.AllReply{Entry: &proto.Entry{Key: k.(string), Val: v.([]byte)}}); err != nil {
+			e = err
+			return false
 		}
-	}
-	return nil
+		return true
+	})
+	return e
 }
 
 func (s *CacheServer) Del(ctx context.Context, in *proto.DelRequest) (*proto.DelReply, error) {
-	delete(s.m, in.Key)
+	s.m.Delete(in.Key)
 	return &proto.DelReply{}, nil
 }
 
 func (s *CacheServer) Set(ctx context.Context, in *proto.SetRequest) (*proto.SetReply, error) {
-	s.m[in.Entry.Key] = in.Entry.Val
+	s.m.Store(in.Entry.Key, in.Entry.Val)
 	return &proto.SetReply{}, nil
 }
 
 func (s *CacheServer) Get(ctx context.Context, in *proto.GetRequest) (*proto.GetReply, error) {
-	v, ok := s.m[in.Key]
+	v, ok := s.m.Load(in.Key)
 	if !ok {
 		return nil, status.Errorf(codes.NotFound, "Key %s not found", in.Key)
 	}
-	return &proto.GetReply{Val: v}, nil
+	return &proto.GetReply{Val: v.([]byte)}, nil
 }
 
 func main() {
 	s := grpc.NewServer()
-	proto.RegisterCacheServer(s, &CacheServer{m: make(map[string][]byte)})
+	proto.RegisterCacheServer(s, &CacheServer{})
 	ln, err := net.Listen("tcp", ":50001")
 	if err != nil {
 		log.Fatal(err)

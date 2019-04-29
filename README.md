@@ -22,6 +22,8 @@ go run client/*
 - get [key] - Gets an entry
 - del [key] - Deletes an entry
 - all - Gets all entries using server-side stream
+- empty - Empty the cache
+- clear - Clear console
 - fill [count] - Fills the cache and benefits from HTTP/2 connection reuse
 - slow-fill [count] - Fills the cache without connection reuse
 

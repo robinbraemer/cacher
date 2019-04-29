@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -115,14 +116,37 @@ cmds:
 			fmt.Printf("Filling %d entities with reusing the connection...\n", count)
 			fillWithConnReuse(ctx, c, count)
 			fmt.Printf("Done! Took %s\n", time.Since(t))
+		case "clear":
+			cmd := exec.Command("clear")
+			cmd.Stdout = os.Stdout
+			cmd.Run()
+		case "empty":
+			stream, err := c.All(ctx, &proto.AllRequest{})
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			for {
+				resp, err := stream.Recv()
+				if err == io.EOF {
+					continue cmds
+				}
+				_, err = c.Del(ctx, &proto.DelRequest{Key: resp.Entry.Key})
+				if err != nil {
+					fmt.Println(err)
+				}
+				fmt.Printf("Deleted '%s'\n", resp.Entry.Key)
+			}
 		default:
 			fmt.Println("Commands:")
-			fmt.Println("set <key> <string>")
-			fmt.Println("get <key>")
-			fmt.Println("del <key>")
-			fmt.Println("all")
-			fmt.Println("fill <count>")
-			fmt.Println("slow-fill <count>")
+			fmt.Println("set <key> <string> - Sets an entry")
+			fmt.Println("get <key> - Gets an entry")
+			fmt.Println("del <key> - Deletes an entry")
+			fmt.Println("all - Get all entries")
+			fmt.Println("empty - Empty the cache")
+			fmt.Println("clear - Clear console")
+			fmt.Println("fill <count> - Fills the cache and benefits from HTTP/2 connection reuse")
+			fmt.Println("slow-fill <count> - Fills the cache without connection reuse")
 		}
 	}
 }
