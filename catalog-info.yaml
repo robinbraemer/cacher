@@ -5,6 +5,8 @@ metadata:
   annotations:
     github.com/project-slug: robinbraemer/cacher
 spec:
-  type: other
-  lifecycle: unknown
+  type: grpc
+  lifecycle: experimental
   owner: robinbraemer
+  providesApis:
+    - cacher
