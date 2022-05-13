@@ -1,7 +1,8 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: API
 metadata:
   name: cacher
+  description: Sample gRPC cache service
   annotations:
     github.com/project-slug: robinbraemer/cacher
     backstage.io/techdocs-ref: dir:.
