@@ -10,5 +10,7 @@ spec:
   type: grpc
   lifecycle: experimental
   owner: robinbraemer
+  definition:
+    $text: https://github.com/robinbraemer/cacher/blob/master/cacher/cacher.proto
   providesApis:
     - cacher
