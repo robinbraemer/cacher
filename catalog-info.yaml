@@ -4,6 +4,7 @@ metadata:
   name: cacher
   annotations:
     github.com/project-slug: robinbraemer/cacher
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: grpc
   lifecycle: experimental
