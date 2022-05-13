@@ -1,0 +1,11 @@
+site_name: Cacher gRPC Service
+site_description: Sample gRPC cache service
+repo_url: https://github.com/robinbraemer/cacher/edit_uri: edit/main/docs
+
+plugins:
+  - techdocs-core
+
+
+nav:
+  - Overview:
+    - Cacher readme: 'README.md'
