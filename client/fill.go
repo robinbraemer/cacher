@@ -9,6 +9,8 @@ import (
 	"log"
 )
 
+// fillWithoutConnReuse fills the cache with a specified number of entries without reusing the connection.
+// It takes a Context and an integer as inputs and does not return anything.
 func fillWithoutConnReuse(ctx context.Context, count int) {
 	// fill cacher
 	r := uuid.New().String()
@@ -28,6 +30,8 @@ func fillWithoutConnReuse(ctx context.Context, count int) {
 		_ = cc.Close()
 	}
 }
+// fillWithConnReuse fills the cache with a specified number of entries, reusing the connection.
+// It takes a Context, a CacheClient, and an integer as inputs and does not return anything.
 func fillWithConnReuse(ctx context.Context, c proto.CacheClient, count int) {
 	// fill cacher
 	r := uuid.New().String()

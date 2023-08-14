@@ -413,6 +413,8 @@ type cacheClient struct {
 	cc *grpc.ClientConn
 }
 
+// NewCacheClient creates a new CacheClient.
+// It takes a ClientConn as input and returns a CacheClient.
 func NewCacheClient(cc *grpc.ClientConn) CacheClient {
 	return &cacheClient{cc}
 }
@@ -484,6 +486,8 @@ type CacheServer interface {
 	All(*AllRequest, Cache_AllServer) error
 }
 
+// RegisterCacheServer registers the CacheServer interface to the gRPC server.
+// It takes a Server and a CacheServer as inputs and does not return anything.
 func RegisterCacheServer(s *grpc.Server, srv CacheServer) {
 	s.RegisterService(&_Cache_serviceDesc, srv)
 }
