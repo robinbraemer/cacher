@@ -15,6 +15,8 @@ import (
 	"time"
 )
 
+// readCommands reads commands from the user and executes them.
+// It takes a CacheClient and a Reader as inputs and does not return anything.
 func readCommands(c proto.CacheClient, rd *bufio.Reader) {
 	ctx := context.Background()
 
@@ -151,6 +153,8 @@ cmds:
 	}
 }
 
+// main starts the client and reads commands from the user.
+// It does not take any inputs or return anything.
 func main() {
 	cc, err := grpc.Dial(":50001", grpc.WithInsecure())
 	if err != nil {
