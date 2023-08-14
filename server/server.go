@@ -46,6 +46,8 @@ func (s *CacheServer) Get(ctx context.Context, in *proto.GetRequest) (*proto.Get
 	return &proto.GetReply{Val: v.([]byte)}, nil
 }
 
+// main starts the server.
+// It does not take any inputs or return anything.
 func main() {
 	s := grpc.NewServer()
 	proto.RegisterCacheServer(s, &CacheServer{})
